@@ -1,0 +1,60 @@
+version: "3.8"
+services:
+  dynamodb:
+    command: -jar DynamoDBLocal.jar --port 4598 -sharedDb -dbPath /home/dynamodblocal
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "4598:4598"
+    working_dir: /home/dynamodblocal
+    volumes:
+      - "dynamodb:/home/dynamodblocal"
+    networks:
+      default:
+        aliases:
+          - "dynamodb"
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.2.2
+    ports:
+      - "2191:2191"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2191
+      ZOOKEEPER_TICK_TIME: 2000
+  kafka:
+    image: confluentinc/cp-kafka:6.2.2
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2191
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-local:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    depends_on:
+      - zookeeper
+    networks:
+      default:
+        aliases:
+          - "kafka-local"
+  schema:
+    image: confluentinc/cp-schema-registry:6.2.2
+    ports:
+      - "9091:9091"
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka-local:9092
+      SCHEMA_REGISTRY_HOST_NAME: schema-local
+      SCHEMA_REGISTRY_LISTENERS: http://schema-local:9091
+    depends_on:
+      - kafka
+    networks:
+      default:
+        aliases:
+          - "schema-local"
+networks:
+  default:
+    name: happymoney-cookiecutter-service-local
+volumes:
+  dynamodb:

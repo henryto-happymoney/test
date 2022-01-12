@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cookiecutter-service
+  annotations:
+    github.com/project-slug: henryto-happymoney/test
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: service
+  owner: henryto-happymoney
+  lifecycle: experimental

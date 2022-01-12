@@ -1,0 +1,62 @@
+---
+spring:
+  devtools:
+    livereload:
+      enabled: false
+  kafka:
+    bootstrap-servers: localhost:9092
+    properties:
+      schema:
+        registry:
+          url: http://localhost:9091
+  data:
+    dynamodb:
+      entity2ddl:
+        auto: create
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://hmplatform-dev.oktapreview.com/oauth2/aus1yaledsAsfGLhY1d7 # replace with your Okta IDP
+        # Getting JWT from IDP
+      client:
+        registration:
+          okta:
+            client-id: <REPLACE WITH CLIENT ID>
+            client-secret: <REPLACE WITH SECRET>
+            authorization-grant-type: client_credentials
+            scope: HM
+        provider:
+          okta:
+            token-uri: https://hmplatform-dev.oktapreview.com/oauth2/aus1yaledsAsfGLhY1d7/v1/token # replace with your Okta IDP
+
+amazon:
+  dynamodb:
+    endpoint: http://localhost:4598/
+    region: local
+    accesskey: accessKeyTest
+    secretkey: secretKeyTest
+    tablename-prefix: dyndb-table-
+    tablename-suffix: -local-ue1
+
+swagger:
+  base:
+    url: localhost:8080
+
+server:
+  port: 8080
+
+logging:
+  config: classpath:log4j2.yml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-components: always
+      show-details: always
+    loggers:
+      enabled: true

@@ -1,0 +1,8 @@
+amazon:
+  dynamodb:
+    endpoint: http://dynamodb-local:4598/
+    region: local
+    accesskey: accessKeyTest
+    secretkey: secretKeyTest
+    tablename-prefix: dyndb-table-
+    tablename-suffix: -test-ue1

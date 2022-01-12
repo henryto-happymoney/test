@@ -1,0 +1,28 @@
+Configuration:
+  name: Default
+
+  Appenders:
+    Console:
+      name: Console_Appender
+      target: SYSTEM_OUT
+      JsonLayout:
+        compact: true
+        eventEol: true
+        properties: true
+        stacktraceAsString: true
+        objectMessageAsJsonObject: true
+        keyValuePair:
+          key: timestamp
+          value: "$${date:yyyy-MM-dd'T'HH:mm:ss.SSSXXX}"
+
+  Loggers:
+    Logger:
+      - name: com.happymoney.cookiecutterservice
+        level: info
+        additivity: false
+        AppenderRef:
+          - ref: Console_Appender
+    Root:
+      level: error
+      AppenderRef:
+        - ref: Console_Appender

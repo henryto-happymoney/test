@@ -1,0 +1,65 @@
+---
+spring:
+  main:
+    banner-mode: off
+  devtools:
+    livereload:
+      enabled: false
+  kafka:
+    listener:
+      ack-mode: record
+    properties:
+      partition.count: 1
+      replication.factor: 1
+      message.max.attempt: 2
+      retry.naming.pattern: -cookiecutter-service-retry
+      dlt.naming.pattern: -cookiecutter-service-dlt
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      group-id: cookiecutter-service
+      properties:
+        specific:
+          avro:
+            reader: true
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+    topics:
+      example-event-consumer: store.cookiecutter-service.example-event-consumer
+      example-event: store.cookiecutter-service.example-event
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://hmplatform-dev.oktapreview.com/oauth2/aus1yaledsAsfGLhY1d7 # replace with your Okta IDP
+      # Getting JWT from IDP
+      client:
+        registration:
+          okta:
+            client-id: <REPLACE WITH CLIENT ID>
+            client-secret: <REPLACE WITH SECRET>
+            authorization-grant-type: client_credentials
+            scope: HM
+        provider:
+          okta:
+            token-uri: https://hmplatform-dev.oktapreview.com/oauth2/aus1yaledsAsfGLhY1d7/v1/token # replace with your Okta IDP
+
+server:
+  port: 8080
+logging:
+  config: classpath:log4j2.yml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-components: always
+      show-details: always
+    loggers:
+      enabled: true

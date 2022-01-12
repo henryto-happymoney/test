@@ -1,0 +1,40 @@
+{
+    "namespace": "com.happymoney.cookiecutterservice.schema",
+    "type": "record",
+    "name": "ExampleEvent",
+    "fields": [
+        {"name": "eventId", "type": {
+            "type": "string",
+            "logicalType": "uuid"
+            }
+        },
+        {"name": "eventMethod", "type": "string" },
+        {"name": "timestamp", "type": "long" },
+        {"name": "data", "type": ["null", {
+            "type": "record",
+            "name": "ExampleEventData",
+            "fields": [
+                {"name": "id", "type": ["string", "null"] },
+                {"name": "content", "type": ["string", "null"] },
+                {"name": "favoriteNumber", "type": ["long", "null"] }
+            ]
+        }]},
+        {
+            "name": "errors",
+            "type": [ "null", {
+                "type": "array",
+                "items": {
+                    "name": "ExampleEventErrors",
+                    "type": "record",
+                    "fields": [
+                        { "name": "status", "type": "string" },
+                        { "name": "title",  "type": "string" },
+                        { "name": "detail", "type": "string"  }
+                    ]
+                }
+            }]},
+        {"name":  "meta", "type":  ["string", "null"] }
+    ]
+}
+
+

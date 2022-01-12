@@ -1,0 +1,5 @@
+site_name: Cookiecutter Service
+nav:
+  - README: ../README.md
+plugins:
+  - techdocs-core
